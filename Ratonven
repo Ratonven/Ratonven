@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ratonven | Portfolio Terminal</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #030712;
+            --panel-bg: rgba(17, 24, 39, 0.7);
+            --primary-color: #38bdf8;
+            --primary-glow: 0 0 10px rgba(56, 189, 248, 0.6);
+            --secondary-color: #818cf8;
+            --secondary-glow: 0 0 15px rgba(129, 140, 248, 0.5);
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border-color: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Share Tech Mono', monospace;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(56, 189, 248, 0.05), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(129, 140, 248, 0.05), transparent 25%);
+        }
+
+        .terminal-container {
+            width: 100%;
+            max-width: 1000px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(56, 189, 248, 0.05);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .terminal-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+            box-shadow: var(--primary-glow);
+        }
+
+        header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary-color);
+            font-size: 24px;
+            text-shadow: var(--primary-glow);
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .status {
+            color: #4ade80;
+            font-size: 14px;
+            text-shadow: 0 0 5px rgba(74, 222, 128, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #4ade80;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #4ade80;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .panel {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .panel:hover {
+            border-color: var(--primary-color);
+            box-shadow: inset 0 0 15px rgba(56, 189, 248, 0.1);
+        }
+
+        .panel h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: #0f172a;
+            box-shadow: var(--primary-glow);
+        }
+
+        .info-text p { margin: 5px 0; }
+        .label { color: var(--text-muted); font-size: 12px;}
+        .value { font-size: 16px; font-weight: bold; color: var(--text-main); }
+
+        .link-list { list-style: none; }
+        .link-list li { margin-bottom: 12px; }
+
+        .link-list a, .discord-id {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-main);
+            text-decoration: none;
+            padding: 10px;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 8px;
+            border: 1px solid transparent;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .discord-id { cursor: default; }
+
+        .link-list a:hover {
+            border-color: var(--primary-color);
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--primary-color);
+            box-shadow: var(--primary-glow);
+            transform: translateX(5px);
+        }
+
+        .icon {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .wallet-box {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .wallet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .wallet-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            color: var(--secondary-color);
+        }
+
+        .wallet-address {
+            font-size: 12px;
+            word-break: break-all;
+            color: var(--text-main);
+            background: rgba(15, 23, 42, 0.8);
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-color);
+            color: var(--bg-color);
+            box-shadow: var(--primary-glow);
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal-container">
+        <header>
+            <div>
+                <h1>RATONVEN PORTFOLIO TERMINAL</h1>
+                <div class="status"><span class="status-dot"></span> SYSTEM_USER: ratonven | ONLINE</div>
+            </div>
+        </header>
+
+        <div class="grid">
+            <!-- Panel Identitas -->
+            <div class="panel">
+                <h2>Identity Module</h2>
+                <div class="profile-info">
+                    <div class="avatar"><i class="fa-solid fa-user-astronaut"></i></div>
+                    <div class="info-text">
+                        <p class="label">ALIAS</p>
+                        <p class="value">Ratonven</p>
+                    </div>
+                </div>
+                <ul class="link-list">
+                    <li>
+                        <div class="discord-id">
+                            <i class="fa-brands fa-discord icon" style="color: #5865F2;"></i>
+                            <span>764541023111217153</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Panel Jaringan Sosial -->
+            <div class="panel">
+                <h2>Network Connections</h2>
+                <ul class="link-list">
+                    <li>
+                        <a href="https://github.com/Ratonven" target="_blank">
+                            <i class="fa-brands fa-github icon"></i>
+                            GitHub Repository
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://x.com/ratonven" target="_blank">
+                            <i class="fa-brands fa-x-twitter icon"></i>
+                            X (Twitter) Feed
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://t.me/ratonven" target="_blank">
+                            <i class="fa-brands fa-telegram icon" style="color: #0088cc;"></i>
+                            Telegram Comms
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Panel Wallet Crypto -->
+            <div class="panel" style="grid-column: 1 / -1;">
+                <h2>Asset Allocation | Wallets</h2>
+                <div class="grid">
+                    <div class="wallet-box">
+                        <div class="wallet-header">
+                            <span class="wallet-name"><i class="fa-brands fa-ethereum"></i> EVM WALLET</span>
+                            <!-- Tombol Copy untuk Wallet EVM -->
+                            <button class="copy-btn" onclick="copyToClipboard('0x875D56fA20d6A2a1fB97ea8C2Ac180d719881134', this)">COPY</button>
+                        </div>
+                        <div class="wallet-address">0x875D56fA20d6A2a1fB97ea8C2Ac180d719881134</div>
+                    </div>
+
+                    <div class="wallet-box">
+                        <div class="wallet-header">
+                            <span class="wallet-name"><i class="fa-solid fa-link"></i> SOLANA WALLET</span>
+                            <!-- Tombol Copy untuk Wallet Solana -->
+                            <button class="copy-btn" onclick="copyToClipboard('HLQdToBy4o7R1Ri7cZSMitjJZ7UJYBphCVZ3DAGPK4ab', this)">COPY</button>
+                        </div>
+                        <div class="wallet-address">HLQdToBy4o7R1Ri7cZSMitjJZ7UJYBphCVZ3DAGPK4ab</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script untuk fitur Copy-to-Clipboard -->
+    <script>
+        function copyToClipboard(text, btnElement) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btnElement.innerText;
+                btnElement.innerText = 'COPIED!';
+                btnElement.style.background = '#4ade80';
+                btnElement.style.color = '#0f172a';
+                btnElement.style.borderColor = '#4ade80';
+                
+                setTimeout(() => {
+                    btnElement.innerText = originalText;
+                    btnElement.style.background = 'transparent';
+                    btnElement.style.color = 'var(--primary-color)';
+                    btnElement.style.borderColor = 'var(--primary-color)';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
